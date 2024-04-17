@@ -28,22 +28,62 @@ class GlobalController extends CI_Controller {
 	public function emailOtp(){
 
        $email =  $_POST['email'];
-	   $data['email'] = $email;
-	   $data['code']  = 0 ;
-		$user = $this->global->verifyUserLogin();
-		var_dump($user);die;
+	   $subject = "Email Verification";
+	   $body 	=	'<h1>test</h1>';
+	   $mail_cc = null;
+	   $data['email'] = $email;  # assign email
+	   $data['code']  = 0 ; #set default code to 0
 
-		
 	   if(!empty($email)){
-		$result = _sendPhpMailer($email,'Email Verification',null,'<h1>test</h1>');
-		$data['code'] = 1;
-		$data['message'] = 'We sent OTP on your email, please check';
+		$result = _sendPhpMailer($email,$subject,$mail_cc,$body);
+			$data['code'] = $result['error'];
+			$data['message'] = 'We sent OTP on your email, please check';
 		echo json_encode($data);
-		
 	   }
 	   else{
 		$data['message'] = 'Email Required';
 		echo json_encode($data);
 	   }
     }
+	public function loginUser(){
+
+	   $username =  $_POST['username'];
+	   $password =  $_POST['password'];
+		$data['code'] = 404;
+		$data['message'] = 'error';
+	   if(isset($username) || !isset($password)){
+			$result = $this->global->verifyUserLogin($username);
+			if(!empty($result)){
+				
+				if($result->Password == $password){
+					$data['code'] = 200;
+					$data['message'] = 'Login Success';
+					$this->setSession($result);
+				}else{
+					$data['code'] = 401;
+					$data['message'] = 'Password does not match';
+				}
+			}
+			else{
+				$data['code'] = 401;
+				$data['message'] = 'Username not found';
+			}
+	   }
+	echo json_encode($data);
+	   
+	}
+	public function logout(){
+
+		$this->session->sess_destroy();
+		redirect(base_url());
+	}
+	private function setSession($result){
+
+		$this->session->set_userdata('username', $result->Username);
+		$this->session->set_userdata('password', $result->Password);
+		$this->session->set_userdata('role', $result->Role);
+		$this->session->set_userdata('SchoolId', $result->SchoolId);
+		$this->session->set_userdata('SystemId', $result->id);
+		
+	}
 }

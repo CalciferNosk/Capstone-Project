@@ -5,9 +5,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>LNHS</title>
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <!-- MDB -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.2.0/mdb.min.css" rel="stylesheet" />
 
     <style>
         body {
@@ -36,106 +39,151 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Services</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Contact</a>
-                </li>
-            </ul>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
+        <!-- Container wrapper -->
+        <div class="container-fluid">
+            <!-- Toggle button -->
+            <button data-mdb-collapse-init class="navbar-toggler" type="button" data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
 
-            <ul class="navbar-nav">
-                <?php if (isset($_SESSION['username'])) :  ?>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <!-- Collapsible wrapper -->
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <!-- Navbar brand -->
+                <a class="navbar-brand mt-2 mt-lg-0" href="#">
+                    <img src="<?= base_url() ?>assets/images/lnhs_logo.jpg" height="25" alt="MDB Logo" loading="lazy" />
+                </a>
+                <!-- Left links -->
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Team</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Projects</a>
+                    </li>
+                    <?php if (isset($_SESSION['role']) == 'admin') : ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Maintenance</a>
+                        </li>
+                    <?php endif; ?>
+                </ul>
+                <!-- Left links -->
+            </div>
+            <!-- Collapsible wrapper -->
+
+            <!-- Right elements -->
+            <div class="d-flex align-items-center">
+                <?php if (isset($_SESSION['username'])) : ?>
+                    <!-- Notifications -->
+                    <div class="dropdown">
+                        <a data-mdb-dropdown-init class="text-reset me-3 dropdown-toggle hidden-arrow" href="#" id="navbarDropdownMenuLink" role="button" aria-expanded="false">
+                            <i class="fas fa-bell"></i>
+                            <span class="badge rounded-pill badge-notification bg-danger">1</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+                            <li>
+                                <a class="dropdown-item" href="#">Some news</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">Another news</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- Avatar -->
+                    <div class="dropdown">
+                        <a data-mdb-dropdown-init class="dropdown-toggle d-flex align-items-center hidden-arrow" href="#" id="navbarDropdownMenuAvatar" role="button" aria-expanded="false">
                             <?= $_SESSION['username'] ?>
                         </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Logout</a>
-                        </div>
-                    </li>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
+                            <li>
+                                <a class="dropdown-item" href="#">My profile</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">Settings</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="<?= base_url() ?>logout">Logout</a>
+                            </li>
+                        </ul>
+                    </div>
                 <?php else : ?>
-                    <li class="nav-item">
-                        <a class="nav-link" id="login-btn" href="#">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="register-btn" href="#">Register</a>
-                    </li>
+                    <a class="btn btn-outline-dark btn-rounded" data-mdb-ripple-init data-mdb-modal-init data-mdb-target="#LoginModal">Login</a>&nbsp;
+                    <a class="btn btn-outline-dark btn-rounded" data-mdb-ripple-init data-mdb-modal-init data-mdb-target="#RegisterModal">Register</a>
                 <?php endif; ?>
-            </ul>
-
+            </div>
+            <!-- Right elements -->
         </div>
+        <!-- Container wrapper -->
     </nav>
+    <!-- Navbar -->
     <div class="content container">
-        <div class="home row justify-content-left">
-            <div class="col-md-6">
-                <div class="card">
-                    content
+        <div class="home row justify-content-center mt-5">
+            <?php foreach ($home_content as $key => $content) :  ?>
+                <div class="<?= $key % 2 == 0 && end($home_content)['id'] == $content['id'] ? 'col-md-10 m-3' : 'col-md-5 m-1' ?> ">
+                    <div class="card">
+                        <h5 class="card-header"><?= $content['HeaderTitle']  ?></h5>
+                        <div class="card-body">
+                            <h5 class="card-title"><?= $content['BodyTitle']  ?></h5>
+                            <p class="card-text"><?= $content['Body']  ?></p>
+                            <a href="<?= empty($content['Link']) ? '#' :  $content['Link'] ?>" class="btn btn-primary" data-mdb-ripple-init>Go somewhere</a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card">
-                    content
-                </div>
-            </div>
+            <?php endforeach; ?>
         </div>
     </div>
     <div>
-        <div class="modal fade" id="RegisterModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="RegisterModalLabel" aria-hidden="true">
+        <div class="modal fade" id="RegisterModal" data-mdb-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="RegisterModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h2 class="text-center mb-4">Register User</h2>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form id="login-form" action="#" method="post">
+                    <form id="register-form" action="#" method="post">
                         <div class="modal-body">
                             <div class="container">
                                 <div class="justify-content-center">
-                                    <div>
+                                    <div class="m-2">
+                                        <div class="row">
+                                            <div class="form-group col-md-4">
+                                                <label for="fname"><span class="text-danger">*</span> Firstname</label>
+                                                <input type="text" class="form-control" name="fname" placeholder="Enter Firstname">
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="mname">Middlename(Optional)</label>
+                                                <input type="text" class="form-control" name="mname" placeholder="Enter Middlename">
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="lname"><span class="text-danger">*</span> Lastname</label>
+                                                <input type="text" class="form-control" name="lname" placeholder="Enter Lastname">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <label for="lrn-no"><span class="text-danger">*</span> LRN Number</label>
+                                                <input type="text" class="form-control" name="lnr_no" placeholder="Enter LRN Number">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <label for="email"><span class="text-danger">*</span> Email Address</label>
+                                                <input type="email" class="form-control" name="email" placeholder="Enter Email">
+                                            </div>
+                                        </div>
 
-                                        <div class="form-group">
-                                            <label for="fname">Firstname</label>
-                                            <input type="text" class="form-control" name="fname" placeholder="Enter Firstname">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="mname">Middlename(Optional)</label>
-                                            <input type="text" class="form-control" name="mname" placeholder="Enter Middlename">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="lname">Lastname</label>
-                                            <input type="text" class="form-control" name="lname" placeholder="Enter Lastname">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="lrn-no">LRN Number</label>
-                                            <input type="text" class="form-control" name="lnr_no" placeholder="Enter LRN Number">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="email">Email Address</label>
-                                            <input type="email" class="form-control" name="email" placeholder="Enter Email">
-                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-secondary" data-mdb-ripple-init data-mdb-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-primary">Register</button>
                             </div>
                     </form>
@@ -146,14 +194,12 @@
     <!-- Modal -->
     <div>
         <!-- Modal -->
-        <div class="modal fade" id="LoginModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="LoginModalLabel" aria-hidden="true">
+        <div class="modal fade" id="LoginModal" data-mdb-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="LoginModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h2 class="text-center mb-4">Login User</h2>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form id="login-form" action="#" method="post">
                         <div class="modal-body">
@@ -163,17 +209,17 @@
 
                                         <div class="form-group">
                                             <label for="username">Username</label>
-                                            <input type="text" class="form-control" id="username" placeholder="Enter username">
+                                            <input type="text" class="form-control" name="username" id="username" placeholder="Enter username">
                                         </div>
                                         <div class="form-group">
                                             <label for="password">Password</label>
-                                            <input type="password" class="form-control" id="password" placeholder="Enter password">
+                                            <input type="password" class="form-control" name="password" id="password" placeholder="Enter password">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-secondary" data-mdb-ripple-init data-mdb-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-primary">Login</button>
                             </div>
                     </form>
@@ -183,21 +229,17 @@
     </div>
     <div>
         <!-- Modal -->
-        <div class="modal fade" id="OtpModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="OtpModalLabel" aria-hidden="true">
+        <div class="modal fade" id="OtpModal" data-mdb-backdrop="static" data-mdb-keyboard="false" tabindex="-1" aria-labelledby="OtpModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h2 class="text-center mb-4">OTP Verification</h2>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
                     </div>
                     <div class="modal-body">
                         <p class="text-center">We sent 5 digits OTP to <span id="email_display"></span>, please check.</p>
                         OTP
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Verify</button>
                     </div>
                 </div>
@@ -208,45 +250,13 @@
 
 
     <!-- Add Bootstrap JS (jQuery and Popper.js required) -->
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <!-- jQuery script to open the modal -->
-    <script>
-        var base_url = '<?= base_url() ?>';
-        $(document).ready(function() {
-            $(document).on('click', '#login-btn', function() {
-                $('#LoginModal').modal('toggle');
-            })
-            $(document).on('click', '#register-btn', function() {
-                $('#RegisterModal').modal('toggle');
-            })
-            $(document).on('submit', '#login-form', function(e) {
-                e.preventDefault();
-
-                $.ajax({
-                    url: base_url + 'email_otp',
-                    type: 'POST',
-                    data: $('#login-form').serialize(),
-                    dataType: 'json',
-                    success: function(response) {
-
-                        if (response.code == 1) {
-                            $('#RegisterModal').modal('hide');
-                            $('#email_display').html(`<b>${response.email}</b>`)
-                            $('#OtpModal').modal('toggle');
-                        } else {
-                            alert(response.message);
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.log(xhr.responseText);
-                    }
-                })
-
-            })
-        });
-    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.2.0/mdb.umd.min.js"></script>
+    <script>  var base_url = '<?= base_url() ?>'; </script>
+    <script src="<?= base_url() ?>assets/js/register.js"></script>
+    <script src="<?= base_url() ?>assets/js/login.js"></script>
+    <script src="<?= base_url() ?>assets/js/home.js"></script>
+   
 </body>
 
 </html>

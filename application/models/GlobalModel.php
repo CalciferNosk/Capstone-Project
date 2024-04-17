@@ -1,6 +1,6 @@
 <?php defined ('BASEPATH') OR exit('No direct script access allowed');
 
-class GlobalbayaModel extends CI_Model{
+class GlobalModel extends CI_Model{
 
     public function __construct()
     {
@@ -10,11 +10,16 @@ class GlobalbayaModel extends CI_Model{
         
     }
 
-    public function verifyUserLogin()
+    public function verifyUserLogin($username)
     {
 
-        $sql = $this->db->query("SELECT * FROM tblsystemuser;");
+        $sql = $this->db->query("SELECT * FROM tblsystemuser WHERE username = '{$username}'");
 
+        return $sql->row();
+    }
+    public function getHomeContent()
+    {
+        $sql = $this->db->query("SELECT * FROM tblhomecontent;");
         return $sql->result_array();
     }
 }

@@ -23,11 +23,11 @@ class DefaultController extends CI_Controller {
     {
         parent::__construct();
 
-        $this->load->model('HomeModel', 'H_model');
+		$this->load->model('GlobalModel', 'global');
     }
 	public function index()
 	{
-        $data = '';
+        $data['home_content'] = $this->global->getHomeContent();
 		$this->load->view('HomeView',$data);
 	}
 
