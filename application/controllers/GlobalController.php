@@ -23,14 +23,17 @@ class GlobalController extends CI_Controller {
     {
         parent::__construct();
 
-        // $this->load->model('GlobalModal', 'global');
+        $this->load->model('GlobalModel', 'global');
     }
 	public function emailOtp(){
 
        $email =  $_POST['email'];
 	   $data['email'] = $email;
 	   $data['code']  = 0 ;
+		$user = $this->global->verifyUserLogin();
+		var_dump($user);die;
 
+		
 	   if(!empty($email)){
 		$result = _sendPhpMailer($email,'Email Verification',null,'<h1>test</h1>');
 		$data['code'] = 1;
