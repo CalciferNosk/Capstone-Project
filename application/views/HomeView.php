@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>LNHS</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url() ?>assets/images/lnhs_logo.jpg">
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
     <!-- Google Fonts -->
@@ -65,9 +66,14 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Projects</a>
                     </li>
-                    <?php if (isset($_SESSION['role']) == 'admin') : ?>
+                    <?php if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 0) : ?>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Maintenance</a>
+                            <a class="nav-link" href="<?= base_url() ?>maintenance">Maintenance</a>
+                        </li>
+                    <?php endif; ?>
+                    <?php if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 2) : ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">My Grades</a>
                         </li>
                     <?php endif; ?>
                 </ul>
@@ -127,7 +133,7 @@
         <div class="home row justify-content-center mt-5">
             <?php foreach ($home_content as $key => $content) :  ?>
                 <div class="<?= $key % 2 == 0 && end($home_content)['id'] == $content['id'] ? 'col-md-10 m-3' : 'col-md-5 m-1' ?> ">
-                    <div class="card">
+                    <div class="card shadow-lg">
                         <h5 class="card-header"><?= $content['HeaderTitle']  ?></h5>
                         <div class="card-body">
                             <h5 class="card-title"><?= $content['BodyTitle']  ?></h5>
@@ -208,7 +214,7 @@
                                     <div>
 
                                         <div class="form-group">
-                                            <label for="username">Username</label>
+                                            <label for="username">Username or Mobile Number(for Parent)</label>
                                             <input type="text" class="form-control" name="username" id="username" placeholder="Enter username">
                                         </div>
                                         <div class="form-group">

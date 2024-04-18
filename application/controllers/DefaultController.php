@@ -30,5 +30,8 @@ class DefaultController extends CI_Controller {
         $data['home_content'] = $this->global->getHomeContent();
 		$this->load->view('HomeView',$data);
 	}
-
+	public function Maintenance()
+	{
+		$this->load->view('MaintenanceView');
+	}
 }

@@ -82,6 +82,7 @@ class GlobalController extends CI_Controller {
 		$this->session->set_userdata('username', $result->Username);
 		$this->session->set_userdata('password', $result->Password);
 		$this->session->set_userdata('role', $result->Role);
+		$this->session->set_userdata('role_id', $result->RoleId);
 		$this->session->set_userdata('SchoolId', $result->SchoolId);
 		$this->session->set_userdata('SystemId', $result->id);
 		

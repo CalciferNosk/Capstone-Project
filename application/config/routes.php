@@ -54,5 +54,7 @@ $route['email_otp']          = 'GlobalController/emailOtp';
 $route['login-user']         = 'GlobalController/loginUser';
 $route['logout']             = 'GlobalController/logout';
 
+$route['maintenance']        = 'DefaultController/Maintenance';
+
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
