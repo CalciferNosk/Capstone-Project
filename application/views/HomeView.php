@@ -12,6 +12,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
     <!-- MDB -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.2.0/mdb.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="<?= base_url() ?>public/css/toast.min.css">
 
     <style>
         body {
@@ -58,24 +59,34 @@
                 <!-- Left links -->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">Home</a>
+                        <a class="nav-link active" href="#" data-content="home">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Team</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Projects</a>
-                    </li>
-                    <?php if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 0) : ?>
+                    <?php if (isset($_SESSION['username'])) : ?>
                         <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url() ?>maintenance">Maintenance</a>
+                            <a class="nav-link" href="#" data-content="team">Team</a>
                         </li>
-                    <?php endif; ?>
-                    <?php if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 2) : ?>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">My Grades</a>
+                            <a class="nav-link" href="#" data-content="projects">Projects</a>
                         </li>
-                    <?php endif; ?>
+                        <?php if ($_SESSION['role_id'] == 0) : ?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?= base_url() ?>maintenance" data-content="maintenance">Maintenance</a>
+                            </li>
+                        <?php endif; ?>
+                        <?php if (in_array($_SESSION['role_id'], [2, 3])) : ?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-content="mygrades">My Grades</a>
+                            </li>
+                        <?php endif;
+                    else : ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-content="about">About Us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-content="contact">Contact Us</a>
+                        </li>
+                    <?php endif; #end in isset
+                    ?>
                 </ul>
                 <!-- Left links -->
             </div>
@@ -129,22 +140,57 @@
         <!-- Container wrapper -->
     </nav>
     <!-- Navbar -->
-    <div class="content container">
+    <div class="content container" id="home">
         <div class="home row justify-content-center mt-5">
             <?php foreach ($home_content as $key => $content) :  ?>
-                <div class="<?= $key % 2 == 0 && end($home_content)['id'] == $content['id'] ? 'col-md-10 m-3' : 'col-md-5 m-1' ?> ">
-                    <div class="card shadow-lg">
-                        <h5 class="card-header"><?= $content['HeaderTitle']  ?></h5>
+                <div class="<?= $key == 0 ? 'col-md-10 m-3 new-content' : 'col-md-5 m-1' ?> ">
+                    <div class="card shadow-lg" style="min-height: 300px">
+                        <div class="m-3">
+                            <span class="card-header" style="font-size: 24px;font-weight: bold"><?= $content['HeaderTitle']  ?></span>
+                            <span class="" style="float: right;"><?= date("M, d Y", strtotime($content['CreatedDate']))  ?></span>
+                        </div>
+
                         <div class="card-body">
                             <h5 class="card-title"><?= $content['BodyTitle']  ?></h5>
                             <p class="card-text"><?= $content['Body']  ?></p>
-                            <a href="<?= empty($content['Link']) ? '#' :  $content['Link'] ?>" class="btn btn-primary" data-mdb-ripple-init>Go somewhere</a>
+
+                        </div>
+                        <div class="card-footer">
+                            <a href="<?= empty($content['Link']) ? '#' :  $content['Link'] ?>" class="btn btn-primary" data-mdb-ripple-init>Read More</a>
                         </div>
                     </div>
                 </div>
             <?php endforeach; ?>
         </div>
     </div>
+    <?php if (isset($_SESSION['username'])) : ?>
+        <div class="content container" id="team" hidden="hidden">
+            <div class="card">
+                Team
+            </div>
+        </div>
+        <div class="content container" id="projects" hidden="hidden">
+            <div class="card">
+                project
+            </div>
+        </div>
+        <div class="content container" id="mygrades" hidden="hidden">
+            <div class="card">
+                my grades
+            </div>
+        </div>
+    <?php else : ?>
+        <div class="content container" id="about" hidden="hidden">
+            <div class="card">
+                about
+            </div>
+        </div>
+        <div class="content container" id="contact" hidden="hidden">
+            <div class="card">
+                contact
+            </div>
+        </div>
+    <?php endif; ?>
     <div>
         <div class="modal fade" id="RegisterModal" data-mdb-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="RegisterModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -252,17 +298,43 @@
             </div>
         </div>
     </div>
-
-
-
+    <div class="ajax-loader loaderstyle" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; display: none">
+        <div style="background: linear-gradient(#000, #FFF, #FFF, #FFF, #FFF, #FFF, #FFF, #FFF, #000); opacity: .5;position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;"></div>
+        <div class="loader" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; background: url('<?= base_url() ?>/public/loader/loader-1.gif') 
+                50% 50% no-repeat transparent">
+        </div>
+    </div>
     <!-- Add Bootstrap JS (jQuery and Popper.js required) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.2.0/mdb.umd.min.js"></script>
-    <script>  var base_url = '<?= base_url() ?>'; </script>
+    <script type="text/javascript" src="<?= base_url() ?>public/js/toast.min.js"></script>
+    <script>
+        var base_url = '<?= base_url() ?>';
+        var session_user = '<?= isset($_SESSION['username']) ? 1 : 0 ?>';
+    </script>
+    <script>
+        $(document).ready(function() {
+
+            sessionStorage.setItem('setdata', '');
+            $.ajaxSetup({
+                beforeSend: function() {
+                    // Show the loading indicator
+                    $('').html('<div class="loading">Loading...</div>');
+                },
+                complete: function() {
+                    // Hide the loading indicator
+                    $('.loading').remove();
+
+                }
+            });
+        })
+    </script>
+    <script src="<?= base_url() ?>assets/js/home.js"></script>
     <script src="<?= base_url() ?>assets/js/register.js"></script>
     <script src="<?= base_url() ?>assets/js/login.js"></script>
-    <script src="<?= base_url() ?>assets/js/home.js"></script>
-   
+
+
+
 </body>
 
 </html>

@@ -98,10 +98,10 @@ switch(ENVIRONMENT):
 		defined('BASE_URL')          ? null : define('BASE_URL', 'http://localhost/Capstone-Project/'); # http://172.18.0.22:8080/ers
 
 		# ERS_DB
-		defined('ERS_DB_HOST')      ? null : define('ERS_DB_HOST', 'localhost');  //'localhost'                       
-		defined('ERS_DB_USER')      ? null : define('ERS_DB_USER', 'root'); //'root'
-		defined('ERS_DB_PASSWORD')  ? null : define('ERS_DB_PASSWORD', 'root');
-		defined('ERS_DB_NAME')      ? null : define('ERS_DB_NAME', 'captone_project');
+		defined('DEFAULT_HOST')      ? null : define('DEFAULT_HOST', 'localhost');  //'localhost'                       
+		defined('DEFAULT_USER')      ? null : define('DEFAULT_USER', 'root'); //'root'
+		defined('DEFAULT_PASSWORD')  ? null : define('DEFAULT_PASSWORD', 'root');
+		defined('DEFAULT_NAME')      ? null : define('DEFAULT_NAME', 'captone_project');
 		
 	break;
 endswitch;

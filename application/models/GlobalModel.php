@@ -9,31 +9,30 @@ class GlobalModel extends CI_Model{
      
     }
 
-    public function verifyUserLogin($username)
+    public function verifyUserLogin($login)
     {
-        $param = $username;
+        $mobileCheck = is_numeric($login) ? 'WHERE MobileNumber IS NOT NULL' : '';
+        $whereClause = is_numeric($login) ? 'MobileNumber' : 'username';
 
-        $mobile_check = is_numeric($param) ?  " WHERE MobileNumber is not NULL" : "";
-        $where_user    = is_numeric($param) ?  " tbl.MobileNumber " : "tbl.username";
+        $sql = $this->db
+            ->where($whereClause, $login)
+            ->get("(SELECT * FROM tblsystemuser $mobileCheck) AS tbl");
 
-        $sql =$this->db
-            ->query("SELECT 
-                        * 
-                        FROM 
-                            (SELECT * FROM tblsystemuser {$mobile_check})  as tbl
-                        WHERE 
-                            {$where_user} = '{$username}' ");
         return $sql->row();
     }
+
     public function getHomeContent()
     {
         $this->load->driver('cache', ['adapter' => 'apc', 'backup' => 'file']);
-        $cache_info = $this->cache->cache_info();
-        $cache_name = "getHomeContent";
-        if (!array_key_exists($cache_name, $cache_info)) {
-            $sql = $this->db->query("SELECT * FROM tblhomecontent;");
-            $this->cache->save($cache_name, $sql->result_array(), 1200);
-        } 
-        return $this->cache->get($cache_name);
+        $key = 'getHomeContent';
+        if (false === ($content = $this->cache->get($key))) {
+            if (false === ($content = $this->db->query("SELECT * FROM tblhomecontent ORDER BY id DESC")->result_array())) {
+                return [];
+            }
+            $this->cache->save($key, $content, 1200);
+        }
+        return $content;
     }
+
+
 }

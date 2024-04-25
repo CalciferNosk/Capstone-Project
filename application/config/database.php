@@ -76,10 +76,10 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => ERS_DB_HOST,
-	'username' => ERS_DB_USER,
-	'password' => ERS_DB_PASSWORD,
-	'database' => ERS_DB_NAME,
+	'hostname' => DEFAULT_HOST,
+	'username' => DEFAULT_USER,
+	'password' => DEFAULT_PASSWORD,
+	'database' => DEFAULT_NAME,
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
